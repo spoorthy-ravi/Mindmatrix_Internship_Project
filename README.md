@@ -1,20 +1,2 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/1d1995c6-b713-4169-9d88-c59d31e45cf8
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Jal-Sanchay Tracker is an Android application developed using Kotlin and Jetpack Compose to promote sustainable rainwater harvesting practices. The app helps users measure and track the amount of rainwater collected by entering details such as roof area, tank capacity, and daily rainfall. It calculates the estimated water saved and displays it through an interactive dashboard with tank-level visualization and historical records.
+The application includes user authentication features like Sign Up, Sign In, Forgot Password, and Sign Out using Firebase Authentication. Data is stored locally using Room Database for efficient offline access. The project also aims to encourage water conservation through smart tips and awareness features, making rainwater harvesting more measurable, understandable, and impactful for household
