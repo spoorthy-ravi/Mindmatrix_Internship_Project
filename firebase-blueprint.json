@@ -1,0 +1,38 @@
+{
+  "entities": {
+    "UserConfig": {
+      "title": "User Configuration",
+      "description": "Rainwater harvesting setup parameters for a user.",
+      "type": "object",
+      "properties": {
+        "roofArea": { "type": "number", "description": "Roof area in square feet." },
+        "tankCapacity": { "type": "number", "description": "Tank capacity in liters." },
+        "runoffCoefficient": { "type": "number", "description": "Runoff coefficient (0.0 to 1.0)." },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["roofArea", "tankCapacity", "runoffCoefficient", "updatedAt"]
+    },
+    "RainfallEntry": {
+      "title": "Rainfall Entry",
+      "description": "Daily rainfall log and calculated water collected.",
+      "type": "object",
+      "properties": {
+        "date": { "type": "string", "format": "date", "description": "Date of the entry." },
+        "rainfallMm": { "type": "number", "description": "Rainfall in millimeters." },
+        "litersCollected": { "type": "number", "description": "Liters of water collected." },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["date", "rainfallMm", "litersCollected", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}/config/main": {
+      "schema": "UserConfig",
+      "description": "The current harvesting configuration for the user."
+    },
+    "/users/{userId}/entries/{entryId}": {
+      "schema": "RainfallEntry",
+      "description": "History of rainfall entries for the user."
+    }
+  }
+}

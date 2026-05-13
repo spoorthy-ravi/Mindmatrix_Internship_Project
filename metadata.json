@@ -1,0 +1,6 @@
+{
+  "name": "Jal-Sanchay Tracker",
+  "description": "A rainwater harvesting tracker with daily logging, tank visualization, history, and AI-generated water-saving tips.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

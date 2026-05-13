@@ -1,0 +1,68 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Allow connection test
+    match /test/connection {
+      allow get: if true;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // Entity Validation: UserConfig
+    function isValidUserConfig(data) {
+      return data.keys().hasAll(['roofArea', 'tankCapacity', 'runoffCoefficient', 'updatedAt'])
+        && data.keys().size() == 4
+        && data.roofArea is number && data.roofArea >= 0 && data.roofArea <= 1000000
+        && data.tankCapacity is number && data.tankCapacity >= 0 && data.tankCapacity <= 10000000
+        && data.runoffCoefficient is number && data.runoffCoefficient >= 0 && data.runoffCoefficient <= 1
+        && data.updatedAt == request.time;
+    }
+
+    // Entity Validation: RainfallEntry
+    function isValidRainfallEntry(data) {
+      return data.keys().hasAll(['date', 'rainfallMm', 'litersCollected', 'createdAt'])
+        && data.keys().size() == 4
+        && data.date is string && data.date.size() <= 20
+        && data.rainfallMm is number && data.rainfallMm >= 0 && data.rainfallMm <= 2000
+        && data.litersCollected is number && data.litersCollected >= 0
+        && data.createdAt == request.time;
+    }
+
+    // User Data matching
+    match /users/{userId} {
+      // Config subcollection
+      match /config/main {
+        allow get: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidUserConfig(incoming());
+      }
+
+      // Entries subcollection
+      match /entries/{entryId} {
+        allow list, get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(entryId) && isValidRainfallEntry(incoming());
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
